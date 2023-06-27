@@ -9,8 +9,26 @@
     <entry name="click_sound_file" type="string">
         <default>/usr/share/sounds/freedesktop/stereo/dialog-information.oga</default>
     </entry>
-        <entry name="click_sound" type="bool">
+    <entry name="limitReached" type="string">
+        <default>LIMIT REACHED</default>
+    </entry>
+    <entry name="limitUnreached" type="string">
+        <default>AVAILABLE</default>
+    </entry>
+    <entry name="click_sound" type="bool">
         <default>true</default>
+    </entry>
+    <entry name="limitEnabled" type="bool">
+        <default>false</default>
+    </entry>
+    <entry name="limitLeft" type="UInt">
+      <default>20</default>
+    </entry>
+    <entry name="limitUnreachedColor" type="string">
+        <default>#0f0</default>
+    </entry>
+        <entry name="limitReachedColor" type="string">
+        <default>#f00</default>
     </entry>
   </group>
 </kcfg>

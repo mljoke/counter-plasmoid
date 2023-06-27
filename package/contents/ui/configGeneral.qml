@@ -4,9 +4,13 @@ import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.0
 import QtMultimedia 5.4
 
+import org.kde.plasma.components 3.0 as PlasmaComponents3
+
 ColumnLayout {
     property alias cfg_click_sound: click_sound.checked
     property alias cfg_click_sound_file: click_sound_file.text
+    property alias cfg_limitEnabled: limitEnabled.checked
+    property alias cfg_limitLeft: limitLeft.value
 
     id: appearancePage
 
@@ -20,11 +24,11 @@ ColumnLayout {
         title: i18n("Sounds")
 
         flat: true
+
         ColumnLayout {
             width: parent.width
 
             RowLayout {
-                Text { width: indentWidth } // indent
                 CheckBox {
                     id: click_sound
                     text: i18n("Click:")
@@ -47,6 +51,20 @@ ColumnLayout {
                         sfx.volume = 1.0
                         sfx.play()
                     }
+                }
+            }
+
+            RowLayout {
+                CheckBox {
+                    id: limitEnabled
+                    text: i18n("Limit:")
+                }
+                PlasmaComponents3.SpinBox {
+                    id: limitLeft
+                    from: 1
+                    value: 20
+                    stepSize: 1
+                    enabled: cfg_limitEnabled
                 }
             }
         }
