@@ -8,8 +8,7 @@ import QtQuick.Layouts 1.1
 import QtMultimedia 5.4
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.components 3.0 as PlasmaComponents3
+import org.kde.plasma.components 3.0 as PlasmaComponents
 
 Item {
     property var textSrc: 0
@@ -132,7 +131,7 @@ Item {
                 PlasmaComponents.Label {
                     text: i18n("Step:")
                 }
-                PlasmaComponents3.SpinBox {
+                PlasmaComponents.SpinBox {
                     implicitWidth: 100
                     id: stepValue
                     from: 1
@@ -194,20 +193,17 @@ Item {
             Layout.alignment: Qt.AlignCenter
 
             PlasmaComponents.Button {
-                implicitWidth: minimumWidth
-                iconSource: "cursor-cross"
+                icon.name: "cursor-cross"
                 onClicked: increase(sfx, stepValue.value)
             }
 
             PlasmaComponents.Button {
-                implicitWidth: minimumWidth
-                iconSource: "media-track-remove-amarok"
+                icon.name: "media-track-remove-amarok"
                 onClicked: decrease(sfx, stepValue.value)
             }
 
             PlasmaComponents.Button {
-                implicitWidth: minimumWidth
-                iconSource: "close-symbolic"
+                icon.name: "close-symbolic"
                 onClicked: reset()
             }
         }

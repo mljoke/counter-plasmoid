@@ -1,10 +1,8 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.0
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.0
 import QtMultimedia 5.4
-
-import org.kde.plasma.components 3.0 as PlasmaComponents3
 
 ColumnLayout {
     property alias cfg_click_sound: click_sound.checked
@@ -18,12 +16,8 @@ ColumnLayout {
         id: sfx
     }
 
-    GroupBox {
+    ColumnLayout {
         Layout.fillWidth: true
-
-        title: i18n("Sounds")
-
-        flat: true
 
         ColumnLayout {
             width: parent.width
@@ -31,7 +25,7 @@ ColumnLayout {
             RowLayout {
                 CheckBox {
                     id: click_sound
-                    text: i18n("Click:")
+                    text: i18n("Click sound:")
                 }
                 Button {
                     text: i18n("Choose")
@@ -45,7 +39,7 @@ ColumnLayout {
                     placeholderText: "/usr/share/sounds/freedesktop/stereo/dialog-information.oga"
                 }
                 Button {
-                    iconName: "media-playback-start"
+                    icon.name: "media-playback-start"
                     onClicked: {
                         sfx.source = click_sound_file.text
                         sfx.volume = 1.0
@@ -59,7 +53,7 @@ ColumnLayout {
                     id: limitEnabled
                     text: i18n("Limit:")
                 }
-                PlasmaComponents3.SpinBox {
+                SpinBox {
                     id: limitLeft
                     from: 1
                     value: 20
