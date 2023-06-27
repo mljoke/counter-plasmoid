@@ -74,19 +74,21 @@ Item {
         onClicked: (mouse.button == Qt.LeftButton) ? plasmoid.expanded = !plasmoid.expanded : reset()
         onWheel: wheelDelta = scroll(wheelDelta, wheel.angleDelta.y, sfx)
 
-        PlasmaComponents.Label {
-            id: label
-            text: textSrc
-            horizontalAlignment: Text.AlignHCenter
-        }
+        RowLayout {
+            anchors.centerIn: parent
+            PlasmaComponents.Label {
+                id: label
+                text: textSrc
+                horizontalAlignment: Text.AlignHCenter
+            }
 
-        PlasmaComponents.Label {
-            id: limit
-            anchors.left: label.right
-            text: " / " + limitLeft
-            color: limitColor
-            visible: plasmoid.configuration.limitEnabled
-            horizontalAlignment: Text.AlignHCenter
+            PlasmaComponents.Label {
+                id: limit
+                text: "/ " + limitLeft
+                color: limitColor
+                visible: plasmoid.configuration.limitEnabled
+                horizontalAlignment: Text.AlignHCenter
+            }
         }
 
         Audio {
@@ -123,22 +125,15 @@ Item {
         }
 
         ColumnLayout {
-
-            anchors {
-                top: fullRoot.top
-                left: fullRoot.left
-                right: fullRoot.right
-                bottom: buttonsRow.top
-            }
-
+            anchors.fill: parent
             RowLayout {
                 id: stepRow
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignCenter
                 PlasmaComponents.Label {
                     text: i18n("Step:")
-                    Layout.alignment: Qt.AlignRight
                 }
                 PlasmaComponents3.SpinBox {
+                    implicitWidth: 100
                     id: stepValue
                     from: 1
                     value: stepV
@@ -149,11 +144,26 @@ Item {
 
             PlasmaComponents.Label {
                 id: currentCount
-                anchors.centerIn: parent
+                Layout.alignment: Qt.AlignCenter
                 text: textSrc
                 font.family: "Noto Sans"
                 font.pointSize: 30 * PlasmaCore.Units.devicePixelRatio
                 horizontalAlignment: Text.AlignHCenter
+            MouseArea {
+                anchors.fill: parent
+                property int wheelDelta: 0
+
+                acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+                onClicked: {
+                    if (mouse.button == Qt.LeftButton) {
+                        plasmoid.expanded = !plasmoid.expanded
+                    } else {
+                        limitLeft = plasmoid.configuration.limitLeft
+                        textSrc = 0
+                    }
+                }
+                onWheel: wheelDelta = scroll(wheelDelta, wheel.angleDelta.y, sfx)
+            }
             }
 
             PlasmaComponents.Label {
@@ -171,7 +181,6 @@ Item {
             PlasmaComponents.Label {
                 id: limitStatus
                 Layout.alignment: Qt.AlignCenter
-                Layout.fillWidth: true
                 text: textLimitSrc
                 visible: plasmoid.configuration.limitEnabled
                 font.family: "Noto Sans"
@@ -179,39 +188,16 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
             }
 
-            MouseArea {
-                anchors.fill: parent
-                property int wheelDelta: 0
-
-                acceptedButtons: Qt.LeftButton | Qt.MiddleButton
-                onClicked: {
-                    if (mouse.button == Qt.LeftButton) {
-                        plasmoid.expanded = !plasmoid.expanded
-                    } else {
-                        limitLeft = plasmoid.configuration.limitLeft
-                        textSrc = 0
-                    }
-                }
-                onWheel: wheelDelta = scroll(wheelDelta, wheel.angleDelta.y, sfx)
-            }
-        }
-
-
-
-        RowLayout {
+            RowLayout {
             id: buttonsRow
             spacing: 10
-
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                bottom: parent.bottom
-            }
+            Layout.alignment: Qt.AlignCenter
 
             PlasmaComponents.Button {
                 implicitWidth: minimumWidth
                 iconSource: "cursor-cross"
                 onClicked: increase(sfx, stepValue.value)
-        }
+            }
 
             PlasmaComponents.Button {
                 implicitWidth: minimumWidth
@@ -224,6 +210,8 @@ Item {
                 iconSource: "close-symbolic"
                 onClicked: reset()
             }
+        }
+
         }
     }
 
