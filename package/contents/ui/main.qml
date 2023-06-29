@@ -6,18 +6,21 @@
 import QtQuick 2.1
 import QtQuick.Layouts 1.1
 import QtMultimedia 5.4
+import QtGraphicalEffects 1.0
+
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.components 3.0 as PlasmaComponents
 
 Item {
     property var textSrc: 0
+    property var stateVal: 1
     property var stepV: 0
     property var textLimitSrc: plasmoid.configuration.limitUnreached
     property var limitLeft: getLimitLeft()
     property var limitColor: plasmoid.configuration.limitUnreachedColor
 
-    //Plasmoid.preferredRepresentation: Plasmoid.compactRepresentation
+    Plasmoid.preferredRepresentation: Plasmoid.compactRepresentation
     function scroll(wheelDelta, eventDelta, sfx) {
             // magic number 120 for common "one click"
             // See: https://doc.qt.io/qt-6/qml-qtquick-wheelevent.html#angleDelta-prop
@@ -42,6 +45,27 @@ Item {
 
             return wheelDelta;
     }
+    function getTextColor() {
+        var color
+
+        switch (stateVal) {
+            case 1:
+            case 3:
+            case 5:
+            case 7:
+                color = theme.textColor
+                break
+            case 2:
+            case 4:
+            case 6:
+            case 8:
+                color = theme.disabledTextColor
+                break
+        }
+
+        return color
+    }
+
     function getLimitLeft() {
         return plasmoid.configuration.limitLeft - textSrc
     }
@@ -64,7 +88,10 @@ Item {
     Plasmoid.compactRepresentation: MouseArea {
         id: compactRoot
 
-        anchors.fill: parent
+        Layout.minimumWidth: units.iconSizes.small
+        Layout.minimumHeight: units.iconSizes.small
+        Layout.preferredHeight: Layout.minimumHeight
+        Layout.maximumHeight: Layout.minimumHeight
         hoverEnabled: true
 
         property int wheelDelta: 0
@@ -74,6 +101,29 @@ Item {
         onWheel: wheelDelta = scroll(wheelDelta, wheel.angleDelta.y, sfx)
 
         RowLayout {
+            spacing: units.smallSpacing
+            Layout.margins: units.smallSpacing
+
+            Item {
+                Layout.preferredHeight: compactRoot.height
+                Layout.preferredWidth: compactRoot.height
+
+                PlasmaCore.IconItem {
+                    id: trayIcon2
+                    height: parent.height
+                    width: parent.width
+                    source:    plasmoid.file("", "images/timer.svg")
+                    smooth: true
+                }
+
+                ColorOverlay {
+                    anchors.fill: trayIcon2
+                    source: trayIcon2
+                    color: getTextColor()
+                }
+            }
+
+
             anchors.centerIn: parent
             PlasmaComponents.Label {
                 id: label
@@ -148,6 +198,7 @@ Item {
                 font.family: "Noto Sans"
                 font.pointSize: 30 * PlasmaCore.Units.devicePixelRatio
                 horizontalAlignment: Text.AlignHCenter
+
             MouseArea {
                 anchors.fill: parent
                 property int wheelDelta: 0
